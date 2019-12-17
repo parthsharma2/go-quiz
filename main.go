@@ -16,16 +16,14 @@ func main() {
 
 	csvFile, err := os.Open(*questionsFile)
 	if err != nil {
-		fmt.Printf("Error occured while opening file %s\n", *questionsFile)
-		os.Exit(1)
+		errorQuit(fmt.Sprintf("Error occured while opening file %s\n", *questionsFile))
 	}
 	defer csvFile.Close()
 
 	csvReader := csv.NewReader(csvFile)
 	lines, err := csvReader.ReadAll()
 	if err != nil {
-		fmt.Println("Error occured while parsing the csv file")
-		os.Exit(1)
+		errorQuit("Error occured while parsing the csv file")
 	}
 
 	questions := parseLines(lines)
@@ -58,4 +56,9 @@ func parseLines(lines [][]string) []question {
 	}
 
 	return questions
+}
+
+func errorQuit(msg string) {
+	fmt.Println(msg)
+	os.Exit(1)
 }
